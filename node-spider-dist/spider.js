@@ -3,6 +3,7 @@
  * 1. 提升稳定性：爬取用户信息时的异常进行处理
  */
 const superagent = require('superagent');
+const lodash = require('lodash');
 const moment = require('moment');
 moment.locale('zh-cn');
 const httpGetAsync = url => new Promise((resolve, reject) => superagent.get(url).end((err, res) => err ? reject(err) : resolve(res && res.text)))
@@ -30,7 +31,7 @@ const nowstr = module.exports.nowstr = () => moment().format('YYYY-MM-DD HH:mm:s
 //  mids：待处理mid列表，
 const packageFetchInsertAsync = async (pid, mids) => {
     const BAN_IP_SLEEP_MS = 1000 * 60 * 10; // 10min
-    const NORMAL_SLEEP_MS = 1000 * 10; //ms
+    const NORMAL_SLEEP_MS = lodash.random(750, 1500, false); // 0.75 ~ 1.5 s
     let sleepms = NORMAL_SLEEP_MS
 
     const midSize = mids.length
