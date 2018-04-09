@@ -59,6 +59,7 @@ const packageFetchInsertAsync = async (pid, mids) => {
             data.card.archive_count = data.archive_count;
             data.card.ctime = nowstr()
             cardList.push(data.card);
+            console.info(`${nowstr()} mid=${mid}`, "Get Success");
             delete processings[mid]
         }).catch((err) => {
             mids.push(mid)
