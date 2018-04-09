@@ -1,0 +1,18 @@
+language: node_js
+
+node_js:
+  - "node"
+  - "lts/*"
+  - "9"
+  - "8"
+
+os:
+  - linux
+  - osx
+
+install:
+  - "cd node-spider-dist"
+  - "npm install"
+
+script:
+  - "node client-ci"
