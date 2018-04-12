@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
-  "scripts": {},
+  "scripts": {
+    "test": "ava"
+  },
   "author": "Nintha",
   "license": "GNU General Public License v3.0",
   "dependencies": {
@@ -13,5 +15,9 @@
     "mongodb": "^3.0.4",
     "redis": "^2.8.0",
     "superagent": "^3.8.2"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "superagent-mocker": "^0.5.2"
   }
 }

@@ -71,7 +71,7 @@ const packageFetchInsertAsync = async (pid, mids) => {
         if (trueSleepTime === BAN_IP_SLEEP_MS) {
             break // 结束本次任务，尝试下个任务
         }
-        
+
         if (mids.length === 0) {
             await sleep(7000)
         }
@@ -84,23 +84,31 @@ const packageFetchInsertAsync = async (pid, mids) => {
     }
 }
 
+const process = module.exports.process = async () => {
+    try {
+        const data = await getPackageAsync();
+        const pid = JSON.parse(data).pid;
+        if (pid == -1) return pid;
+
+        const mids = packageArray(pid)
+        console.log(`${nowstr()} Get package ${pid}, fetch mids [${mids[0]}, ${mids[mids.length-1]}]`);
+        await packageFetchInsertAsync(pid, mids)
+    } catch (err) {
+        console.error("很有可能是网络超时了, 10秒后重试", err.message)
+        await sleep(10000);
+    }
+};
+
 const run = async () => {
     console.log(nowstr() + " Start to fetch member info.")
     for (;;) {
-        try {
-            const data = await getPackageAsync();
-            const pid = JSON.parse(data).pid;
-            if (pid == -1) break
-
-            const mids = packageArray(pid)
-            console.log(`${nowstr()} Get package ${pid}, fetch mids [${mids[0]}, ${mids[mids.length-1]}]`);
-            await packageFetchInsertAsync(pid, mids)
-        } catch (err) {
-            console.error("很有可能是网络超时了, 10秒后重试", err.message)
-            await sleep(10000);
-        }
+        if (await process() === -1) break;
     }
     console.log(nowstr() + ` End fetch.`);
 }
 // start code
-run();
+// run();
+
+module.exports.setMock = (mockerModule) => {
+    return mockerModule(superagent);
+};
